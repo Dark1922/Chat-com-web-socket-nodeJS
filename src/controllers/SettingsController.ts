@@ -22,5 +22,22 @@ const settings = await  settingsService.create({
 }
 
 }
+async findByUsername(request: Request, response:Response) {
+  const {username} = request.params;
+
+  const settingsService = new SettigsService();
+  const settings = await settingsService.findByUsername(username);
+
+  return response.json(settings);
+}
+async update(request: Request, response:Response) {
+  const {username} = request.params;
+  const { chat } = request.body; //vamos receber o chat pelo body
+  const settingsService = new SettigsService();
+  const settings = await settingsService.update(username, chat);//passando username e chat pra fente atualizar
+
+  return response.json(settings);
+
+}
 }
 export {SettignsController}

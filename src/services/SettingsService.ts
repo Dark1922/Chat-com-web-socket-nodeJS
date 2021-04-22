@@ -31,6 +31,20 @@ class SettigsService {
 
      return settings;
   }
-
+   async findByUsername(username: string) {
+     const settings = await this.settingsRepository.findOne({
+       username
+     });
+     return settings;
+   }
+   async update(username: string, chat:boolean) {//createQueryBuilder do propio typeorm abaixo
+     const settings  = await this.settingsRepository.createQueryBuilder().
+     update(Setting)//update tb do typeorm
+     .set({chat})//quero alterar o valor do meu chat
+     .where("username = :username", {//onde
+      username,
+        })
+     .execute(); //vai executar esse nosso updtae
+   }
 }
-export {SettigsService}; //export da classe
+export {SettigsService};

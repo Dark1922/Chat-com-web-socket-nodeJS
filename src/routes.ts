@@ -9,12 +9,13 @@ const settignsController = new SettignsController();
 const usersController = new UserController();
 const messagesController = new MessagesController();
 
-routes.post("/settings",settignsController.create );
+routes.post("/settings",settignsController.create);
+routes.get("/settings/:username",settignsController.findByUsername);
+routes.put("/settings/:username",settignsController.update);
+//método de atualizar
 routes.post("/users", usersController.create);
 routes.post("/messages",  messagesController.create);
 routes.get("/messages/:id",  messagesController.showByUser);
-//método do controller showByUser junto do service e o id massa
-//recebe o parametro :id
-//dados da nossas settings settignsController.create
+
 
 export {routes};
