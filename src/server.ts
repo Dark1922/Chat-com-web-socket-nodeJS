@@ -1,5 +1,5 @@
-import {http} from './http';
-import  './websocket/client';
+import { http } from "./http"
+import "./websocket/client";
+import "./websocket/admin";
 
-http.listen(3333, () => console.log('BackEnd startado. porta 3333! 🚀'));
-//botamos http.listen tamos subindo o http mas também estamos subindo o servidor ws
+http.listen(3333, () => console.log("Server is running on port 3333"))

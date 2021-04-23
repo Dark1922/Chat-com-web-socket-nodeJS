@@ -1,22 +1,24 @@
-import {Entity, PrimaryColumn, Column, CreateDateColumn} from "typeorm"
-import { v4 as uuid } from 'uuid'
+import { Entity, Column, CreateDateColumn, PrimaryColumn } from "typeorm";
 
-@Entity("users")//entidade do banco de dados
-class User {
-  @PrimaryColumn()//primeira da coluna
-  id:string;
+import { v4 as uuid } from "uuid";
 
-  @Column()
-  email:string;
+@Entity("users")
+class User{
+    
+    @PrimaryColumn()
+    id: string;
 
-  @CreateDateColumn()
-  created_at: Date;
+    @Column()
+    email: string;
+    
+    @CreateDateColumn()
+    created_at: Date;
 
-  constructor() { //responsabilidade de criar id pra nossa entidade
-    if(!this.id){
-    this.id = uuid();
-    }
+    constructor(){
+        if(!this.id){
+            this.id = uuid();
+        }
     }
 }
 
-export {User}
+export { User };

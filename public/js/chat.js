@@ -1,28 +1,88 @@
+let socket_admin_id = null;
+let emailUser = null;
+let socket = null;
 document.querySelector("#start_chat").addEventListener("click", (event) => {
- const socket = io();
- //os chat de email e text de ajuda com conexão pelos id deles e dando value
- const chat_help = document.getElementById("chat_help");
- chat_help.style.display = "none";
+    socket = io();
+    
+    const chat_help = document.getElementById("chat_help");
+    chat_help.style.display = "none";
+    
+    const chat_in_support = document.getElementById("chat_in_support");
+    chat_in_support.style.display = "block";
+    
 
- const chat_in_support = document.getElementById("chat_in_support");
- chat_in_support.style.display = "block"
+    const email = document.getElementById("email").value;
+    emailUser = email;
+    const text = document.getElementById("txt_help").value;
 
- const email = document.getElementById("email").value;
- const text  = document.getElementById("txt_help").value;
+    socket.on("connect", () =>{
+        const params = {
+            email, 
+            text
+        };
+        socket.emit("client_first_access",params, (call, err) => {
+            if(err){
+                console.log(err);
+            }else{
+                console.log(call);
+            }
+        });
+    });
 
- socket.on("connect",() => {//qnd eu tiver conectado ai sim vamos emitir nossos evento
- //vamos criar os paramentros que serão email e text agora
- const params = {
-   email,
-   text
- }
+    socket.on("client_list_all_messages", (messages) =>{
 
-  socket.emit("client_first_acess", params, (call, err) => {//o nome que criamos no client vamos emitir um evento callback e error
-   if(err) {
-     console.err(err); //se der um erro
-   }else {
-     console.log(call); // se não da console.log com callback
-   }
-  });
- });
+        var template_client = document.getElementById("message-user-template").innerHTML;
+        var template_admin = document.getElementById("admin-template").innerHTML;
+        
+        messages.forEach(message =>{
+            if(message.admin_id == null){
+                const rendered = Mustache.render(template_client, {
+                    message: message.text,
+                    email
+                })
+                document.getElementById("messages").innerHTML += rendered;
+            }else{
+                const rendered = Mustache.render(template_admin, {
+                    message_admin: message.text
+                })
+                document.getElementById("messages").innerHTML += rendered;
+            }
+        });
+    });
+
+    socket.on("admin_send_to_client", (message) =>{
+        
+        socket_admin_id = message.socket_id;
+
+        const template_admin = document.getElementById("admin-template").innerHTML;
+
+        const rendered = Mustache.render(template_admin, {
+            message_admin: message.text,
+        })
+
+        document.getElementById("messages").innerHTML += rendered;
+    });
 });
+
+document.querySelector('#send_message_button').addEventListener('click', event => {
+    const text = document.getElementById('message_user');
+  
+    const params = {
+      text: text.value,
+      socket_admin_id,
+    };
+  
+    socket.emit('client_send_to_admin', params);
+  
+    const template_client = document.getElementById('message-user-template').innerHTML;
+  
+    const rendered = Mustache.render(template_client, {
+      message: text.value,
+      email: emailUser,
+    });
+  
+    document.getElementById('messages').innerHTML += rendered;
+  
+    text.value = '';
+    
+  });

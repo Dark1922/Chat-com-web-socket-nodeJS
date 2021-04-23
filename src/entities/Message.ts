@@ -1,34 +1,37 @@
-import {Entity, PrimaryColumn, CreateDateColumn, Column, ManyToOne, JoinColumn} from 'typeorm'
-import { v4 as uuid } from 'uuid'
-import { User } from './User';
+import { Entity, PrimaryColumn, CreateDateColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { User } from "./User";
 
-@Entity("messages")//tabela messages
-class Message {
+import { v4 as uuid } from "uuid";
 
-@PrimaryColumn()
-id: string;
+@Entity("messages")
+class Message{
+    
+    @PrimaryColumn()
+    id: string;
+    
+    @Column()
+    admin_id: string;
+    
+    @Column()
+    text: string;
 
-@Column()
-admin_id: string;
+    @JoinColumn({ name: "user_id"})
+    @ManyToOne(() => User)
+    user: User;
 
-@Column()
-text: string;
+    @Column()
+    user_id: string;
 
+    @CreateDateColumn()
+    created_at: Date;
 
-@JoinColumn({name:"user_id"})
-@ManyToOne(()=> User)
-user: User
+    constructor(){
 
-@Column()
-user_id:string;
-
-@CreateDateColumn()
-created_at:Date;
-
-constructor() {
-  if(!this.id){
-  this.id = uuid();
-  }
-  }
+        if(!this.id){
+            this.id = uuid();
+        }
+    }
+    
 }
-export {Message}
+
+export { Message }
