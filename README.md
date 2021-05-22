@@ -2,7 +2,7 @@
 
 <h3 align="center">Chat Support</h3>
 
-<p align="center">“Hoje, o ‘eu não sei’, se tornou o ‘eu ainda não sei’.”</p>
+
 
 <p align="center">
   <a href="#about">Sobre</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
